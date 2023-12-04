@@ -56,13 +56,14 @@ void Scene13::update(float deltaTime)
 	text[2]->message(""); // clear [/] next scene
 	text[3]->message(""); // clear <esc> to quit
 	text[10]->message(""); // clear player click count message
- 
+
+	// player wants to shoot
 	if (input()->getKeyDown( KeyCode::Space )) {
-		if (shoottimer.seconds() > SHOOTING_DELAY) {
+		if (shoottimer.seconds() > 0.8f) {
 			PixelSprite b = player_bullet; // copy sprites etc
 			b.position = player.position + Pointi(0,2);
 			player_bullets.push_back(b);
-			shoottimer.start(); 
+			shoottimer.start();
 		}
 	}
 	// ###############################################################

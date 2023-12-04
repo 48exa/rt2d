@@ -15,7 +15,6 @@
 class MyEntity : public Entity
 {
 public:
-	float rotationSpeed;
 	/// @brief Constructor
 	MyEntity();
 	/// @brief Destructor

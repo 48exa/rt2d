@@ -53,15 +53,6 @@ void MyScene::update(float deltaTime)
 		myentity->scale = Point(1.0f, 1.0f);
 	}
 
-	if (input()->getKeyDown(KeyCode::R))
-	{
-		myentity->rotationSpeed *= 2.5;
-	}
-	if (input()->getKeyUp(KeyCode::R))
-	{
-		myentity->rotationSpeed /= 2.5;
-	}
-
 	// ###############################################################
 	// Rotate color
 	// ###############################################################
