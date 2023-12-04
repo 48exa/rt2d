@@ -15,6 +15,7 @@
 #include "superscene.h"
 
 #define POINT_OF_NO_RETURN Pointi(-1000,-1000)
+#define SHOOTING_DELAY (0.8f)
 
 struct SI_AnimatedSprite {
 	Pointi position;
