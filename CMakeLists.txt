@@ -1,5 +1,5 @@
 # CMake entry point
-cmake_minimum_required (VERSION 2.8.12)
+cmake_minimum_required (VERSION 3.5)
 project (rt2d)
 
 # delete CMakeCache.txt from the build directory when you edit these options
@@ -165,6 +165,31 @@ IF(MAKE_START)
 	# Copy assets to the build directory
 	file(
 		COPY start/assets
+		DESTINATION ${CMAKE_BINARY_DIR}
+	)
+ENDIF()
+
+####################################################################
+# src                                                            #
+####################################################################
+IF(MAKE_START)
+	add_executable(src
+		src/main.cpp
+		src/floor.cpp
+		src/floor.h
+		src/scenemanager.cpp
+		src/scenemanager.h
+		src/player.cpp
+		src/player.h
+		src/obstacle.cpp
+		src/obstacle.h
+	)
+	target_link_libraries(src
+		${ALL_GRAPHICS_LIBS}
+	)
+	# Copy assets to the build directory
+	file(
+		COPY src/assets
 		DESTINATION ${CMAKE_BINARY_DIR}
 	)
 ENDIF()
