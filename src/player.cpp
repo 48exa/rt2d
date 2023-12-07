@@ -21,19 +21,19 @@ void Player::addForce(Point2 force)
 	this->acceleration += force;
 }
 
-bool Player::onFloor(Floor *ground)
+bool Player::onFloor()
 {
-	if (this->position.y < ground->position.y - ground->sprite()->size.y)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return this->position.y < SHEIGHT - 32 ? false : true;
 }
 
 void Player::jump()
 {
-	this->velocity -= Point2(0.0, 1750);
+	this->velocity -= Point2(0.0, 1350);
+}
+
+void Player::movement(float deltaTime)
+{
+	this->velocity += this->acceleration * deltaTime;
+	this->position += this->velocity * deltaTime;
+	this->acceleration *= 0;
 }

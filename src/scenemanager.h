@@ -12,8 +12,10 @@
 #include <rt2d/scene.h>
 
 #include "player.h"
-#include "floor.h"
 #include "obstacle.h"
+#include "obstaclelayer.h"
+
+#define GRAVITY (5500)
 
 class SceneManager : public Scene
 {
@@ -22,15 +24,15 @@ public:
 	virtual ~SceneManager();
 
 	virtual void update(float deltaTime);
+	bool AABB(Obstacle *obstacle);
 
 private:
-	std::vector<Obstacle*> obstacles;
+	std::vector<Obstacle *> obstacles;
+	char gravityVal;
 	Point2 gravity;
 
-	Obstacle *square;
-	Obstacle *square2;
+	ObstacleLayer *layer;
 	Player *player;
-	Floor *floor;
 	Timer t;
 };
 

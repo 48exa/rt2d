@@ -175,14 +175,14 @@ ENDIF()
 IF(MAKE_START)
 	add_executable(src
 		src/main.cpp
-		src/floor.cpp
-		src/floor.h
 		src/scenemanager.cpp
 		src/scenemanager.h
 		src/player.cpp
 		src/player.h
 		src/obstacle.cpp
 		src/obstacle.h
+		src/obstaclelayer.cpp
+		src/obstaclelayer.h
 	)
 	target_link_libraries(src
 		${ALL_GRAPHICS_LIBS}

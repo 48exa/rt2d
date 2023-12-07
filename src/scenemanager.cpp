@@ -14,6 +14,10 @@ SceneManager::SceneManager() : Scene()
 {
 	// start the timer.
 	t.start();
+	layer = new ObstacleLayer();
+
+	// initialise the gravity
+	this->gravity = Point2(0.0, GRAVITY);
 
 	// initialise the list of all obstacles
 	obstacles = std::vector<Obstacle *>();
@@ -23,29 +27,21 @@ SceneManager::SceneManager() : Scene()
 	player = new Player();
 	player->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 
-	// initiate the floor
-	floor = new Floor();
-	floor->position = Point2(SWIDTH / 2, SHEIGHT);
-
 	// initiate all obstacles
-	square = new Obstacle(Point2(SWIDTH, 600), false, "assets/gdcube.tga");
-	square2 = new Obstacle(Point2(SWIDTH - 256, 600), false, "assets/gdcube.tga");
+	obstacles.push_back(new Obstacle(Point2(SWIDTH / 1.5, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+	obstacles.push_back(new Obstacle(Point2(SWIDTH / 1.3, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+	// obstacles.push_back(new Obstacle(Point2(SWIDTH - 64, SHEIGHT - 32), false, "assets/gdsquare.tga"));
 
 	// create the scene 'tree'
 	// add player to this Scene as a child.
-	this->addChild(square);
-	this->addChild(square2);
 	this->addChild(player);
-	this->addChild(floor);
 
-	// initialise the gravity
-	this->gravity = Point2(0.0, 6000);
+	for (const auto obstacle : obstacles)
+	{
+		layer->addChild(obstacle);
+	}
 
-	// add all obstacles to the list
-	obstacles.push_back(square);
-	obstacles.push_back(square2);
-
-	std::cout << "floor" << floor->position.y - floor->sprite()->size.y << std::endl;
+	this->addChild(layer);
 }
 
 SceneManager::~SceneManager()
@@ -57,8 +53,18 @@ SceneManager::~SceneManager()
 	delete player;
 }
 
+bool SceneManager::AABB(Obstacle *obstacle)
+{
+	return (player->position.x < obstacle->position.x + obstacle->sprite()->size.x + layer->position.x &&
+					player->position.x - player->sprite()->size.x - layer->position.x > obstacle->position.x - obstacle->sprite()->size.x * 2 &&
+					player->position.y < obstacle->position.y + obstacle->sprite()->size.y - layer->position.y &&
+					player->position.y + player->sprite()->size.y + layer->position.y > obstacle->position.y);
+}
+
 void SceneManager::update(float deltaTime)
 {
+	player->sprite()->color = WHITE;
+
 	if (input()->getKeyUp(KeyCode::Escape))
 	{
 		this->stop();
@@ -68,33 +74,27 @@ void SceneManager::update(float deltaTime)
 	player->addForce(this->gravity);
 
 	// movement 101
-	player->velocity += player->acceleration * deltaTime;
-	player->position += player->velocity * deltaTime;
-	player->acceleration *= 0;
+	player->movement(deltaTime);
 
-	if (player->onFloor(floor))
+	for (const auto obs : obstacles)
 	{
-		player->position.y = floor->position.y - floor->sprite()->size.y;
+		if (AABB(obs))
+		{
+			player->sprite()->color = RED;
+		}
+	}
+
+	if (player->onFloor())
+	{
+		player->position.y = SHEIGHT - 32;
 		player->velocity *= 0;
 	}
 
 	if (input()->getKeyDown(KeyCode::Space))
 	{
-		if (player->onFloor(floor))
+		if (player->onFloor())
 		{
-			std::cout << "floor " << floor->position.y - floor->sprite()->size.y << std::endl;
 			player->jump();
 		}
 	}
-
-	for (const auto obstacle : this->obstacles)
-	{
-		obstacle->position += Point3(-100, 0, 0) * deltaTime;
-	}
 }
-
-// velocity is constantly being decreased by gravity
-// gravity is exponentional so it needs to somehow speed up while
-// the cube is in the air
-// when you jump you boost the velocity by a big number and then gravity
-// will slowly take over and slow the cube down, until it starts falling down again

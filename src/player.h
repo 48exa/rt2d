@@ -4,7 +4,6 @@
 #define PLAYER_H
 
 #include <entity.h>
-#include "floor.h"
 
 class Player : public Entity
 {
@@ -16,9 +15,10 @@ public:
 	virtual ~Player();
 
 	virtual void update(float deltaTime);
-	bool onFloor(Floor* ground);
+	bool onFloor();
 	void addForce(Point2 force);
 	void jump();
+	void movement(float deltaTime);
 
 private:
 	/* add your private declarations */
