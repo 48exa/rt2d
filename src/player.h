@@ -19,6 +19,8 @@ public:
 	void addForce(Point2 force);
 	void jump();
 	void movement(float deltaTime);
+	void resetMovement();
+	void setOnFloor();
 
 private:
 	/* add your private declarations */

@@ -10,6 +10,7 @@ Player::Player() : Entity()
 
 Player::~Player()
 {
+	delete this;
 }
 
 void Player::update(float deltaTime)
@@ -29,6 +30,7 @@ bool Player::onFloor()
 void Player::jump()
 {
 	this->velocity -= Point2(0.0, 1350);
+	// this->addForce(Point2(0.0, 5500 * 100000000));
 }
 
 void Player::movement(float deltaTime)
@@ -36,4 +38,14 @@ void Player::movement(float deltaTime)
 	this->velocity += this->acceleration * deltaTime;
 	this->position += this->velocity * deltaTime;
 	this->acceleration *= 0;
+}
+
+void Player::resetMovement()
+{
+	this->velocity *= 0;
+}
+
+void Player::setOnFloor()
+{
+	this->position.y = SHEIGHT - 32;
 }

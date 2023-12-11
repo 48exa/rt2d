@@ -12,9 +12,10 @@ public:
 	virtual ~ObstacleLayer();
 
 	void update(float deltaTime);
+	void resetPosition();
 
 private:
-	/* add your private declarations */
+	float originalPosition;
 };
 
 #endif /* OBSTACLELAYER_H */

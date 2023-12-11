@@ -25,10 +25,12 @@ public:
 
 	virtual void update(float deltaTime);
 	bool AABB(Obstacle *obstacle);
+	bool landingCollision(Obstacle *obstacle);
 
 private:
+	bool overlapping;
 	std::vector<Obstacle *> obstacles;
-	char gravityVal;
+	uint16_t gravityVal;
 	Point2 gravity;
 
 	ObstacleLayer *layer;

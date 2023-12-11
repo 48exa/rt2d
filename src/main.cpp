@@ -28,7 +28,7 @@ int main(void)
 	while (scenemanager->isRunning())
 	{													// check status of Scene every frame
 		core.run(scenemanager); // update and render the current scene
-		core.showFrameRate(5);	// show framerate in output every n seconds
+		core.showFrameRate(2);	// show framerate in output every n seconds
 	}
 	// core.cleanup(); // cleanup ResourceManager (Textures + Meshes, but not Shaders)
 	delete scenemanager; // delete Scene and everything in it from the heap to make space for next Scene

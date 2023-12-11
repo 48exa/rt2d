@@ -4,6 +4,7 @@
 
 ObstacleLayer::ObstacleLayer() : Entity()
 {
+	this->originalPosition = this->position.x;
 }
 
 ObstacleLayer::~ObstacleLayer()
@@ -12,5 +13,10 @@ ObstacleLayer::~ObstacleLayer()
 
 void ObstacleLayer::update(float deltaTime)
 {
-	this->position += Point2(-100, 0) * deltaTime;
+	this->position += Point2(-300, 0) * deltaTime;
+}
+
+void ObstacleLayer::resetPosition()
+{
+	this->position.x = this->originalPosition;
 }

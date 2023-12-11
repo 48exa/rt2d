@@ -28,8 +28,12 @@ SceneManager::SceneManager() : Scene()
 	player->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 
 	// initiate all obstacles
-	obstacles.push_back(new Obstacle(Point2(SWIDTH / 1.5, SHEIGHT - 32), false, "assets/gdsquare.tga"));
-	obstacles.push_back(new Obstacle(Point2(SWIDTH / 1.3, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+	// for (size_t i = 0; i < 1; i++)
+	// {
+	obstacles.push_back(new Obstacle(Point2(900, SHEIGHT - 100), false, "assets/gdsquare.tga"));
+	obstacles.push_back(new Obstacle(Point2(1000, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+	// }
+
 	// obstacles.push_back(new Obstacle(Point2(SWIDTH - 64, SHEIGHT - 32), false, "assets/gdsquare.tga"));
 
 	// create the scene 'tree'
@@ -61,6 +65,13 @@ bool SceneManager::AABB(Obstacle *obstacle)
 					player->position.y + player->sprite()->size.y + layer->position.y > obstacle->position.y);
 }
 
+bool SceneManager::landingCollision(Obstacle *obstacle)
+{
+	return (player->position.x < (obstacle->position.x + obstacle->sprite()->size.x / 2) - layer->position.x &&
+					player->position.x + (player->sprite()->size.x / 2) > (obstacle->position.x - obstacle->sprite()->size.x / 2) + layer->position.x &&
+					player->position.y < obstacle->position.y - obstacle->sprite()->size.y / 2);
+}
+
 void SceneManager::update(float deltaTime)
 {
 	player->sprite()->color = WHITE;
@@ -76,25 +87,47 @@ void SceneManager::update(float deltaTime)
 	// movement 101
 	player->movement(deltaTime);
 
-	for (const auto obs : obstacles)
+	overlapping = false;
+	for (const auto obstacle : obstacles)
 	{
-		if (AABB(obs))
+		if (AABB(obstacle))
 		{
-			player->sprite()->color = RED;
+			if (landingCollision(obstacle))
+			{
+				// set the player ontop of the obstacle
+				player->position.y = obstacle->position.y - obstacle->sprite()->size.y;
+				overlapping = true;
+				player->resetMovement();
+			}
+			else
+			{
+				layer->resetPosition();
+			}
 		}
 	}
 
 	if (player->onFloor())
 	{
-		player->position.y = SHEIGHT - 32;
-		player->velocity *= 0;
+		player->setOnFloor();
+		player->resetMovement();
 	}
 
-	if (input()->getKeyDown(KeyCode::Space))
+	if (input()->getKey(KeyCode::Space))
 	{
-		if (player->onFloor())
+		if (player->onFloor() || overlapping)
 		{
 			player->jump();
 		}
+	}
+
+	if (input()->getKeyDown(KeyCode::A))
+	{
+		obstacles.push_back(new Obstacle(Point2(1000 - layer->position.x, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+		layer->addChild(obstacles.back());
+	}
+
+	if (input()->getKeyDown(KeyCode::R))
+	{
+		layer->resetPosition();
 	}
 }
