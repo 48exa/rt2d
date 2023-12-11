@@ -28,13 +28,22 @@ SceneManager::SceneManager() : Scene()
 	player->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 
 	// initiate all obstacles
-	// for (size_t i = 0; i < 1; i++)
-	// {
-	obstacles.push_back(new Obstacle(Point2(900, SHEIGHT - 100), false, "assets/gdsquare.tga"));
-	obstacles.push_back(new Obstacle(Point2(1000, SHEIGHT - 32), false, "assets/gdsquare.tga"));
-	// }
+	obstacles.push_back(new Obstacle(Point2(900, SHEIGHT - 32), false, "assets/gdsquare.tga"));
 
-	// obstacles.push_back(new Obstacle(Point2(SWIDTH - 64, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+	obstacles.push_back(new Obstacle(Point2(1100, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+	obstacles.push_back(new Obstacle(Point2(1100, SHEIGHT - 32 - 64), false, "assets/gdsquare.tga"));
+
+	obstacles.push_back(new Obstacle(Point2(1270, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+	obstacles.push_back(new Obstacle(Point2(1270 + 64, SHEIGHT - 32), false, "assets/gdsquare.tga"));
+
+	for (size_t i = 0; i < 4; i++)
+	{
+		obstacles.push_back(new Obstacle(Point2(1280, SHEIGHT - 32 - 64 * 2 - 64 * i), false, "assets/gdsquare.tga"));
+	}
+	for (size_t i = 0; i < 3; i++)
+	{
+		obstacles.push_back(new Obstacle(Point2(1280 + 180, SHEIGHT - 32 - (64 * i)), false, "assets/gdsquare.tga"));
+	}
 
 	// create the scene 'tree'
 	// add player to this Scene as a child.
