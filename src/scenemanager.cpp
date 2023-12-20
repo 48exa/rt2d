@@ -64,6 +64,7 @@ SceneManager::~SceneManager()
 
 	// delete player from the heap (there was a 'new' in the constructor)
 	delete player;
+	delete layer;
 }
 
 bool SceneManager::AABB(Obstacle *obstacle)
@@ -96,7 +97,7 @@ void SceneManager::update(float deltaTime)
 	// movement 101
 	player->movement(deltaTime);
 
-	overlapping = false;
+	player->overlapping = false;
 	for (const auto obstacle : obstacles)
 	{
 		if (AABB(obstacle))
@@ -105,7 +106,7 @@ void SceneManager::update(float deltaTime)
 			{
 				// set the player ontop of the obstacle
 				player->position.y = obstacle->position.y - obstacle->sprite()->size.y;
-				overlapping = true;
+				player->overlapping = true;
 				player->resetMovement();
 			}
 			else
@@ -123,7 +124,7 @@ void SceneManager::update(float deltaTime)
 
 	if (input()->getKey(KeyCode::Space))
 	{
-		if (player->onFloor() || overlapping)
+		if (player->onFloor() || player->overlapping)
 		{
 			player->jump();
 		}

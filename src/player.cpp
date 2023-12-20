@@ -6,6 +6,8 @@ Player::Player() : Entity()
 {
 	this->addSprite("assets/gdcube.tga");
 	this->sprite()->color = WHITE;
+	this->rotationSpeed = 0;
+	this->quarter_pi = HALF_PI / 2;
 }
 
 Player::~Player()
@@ -15,6 +17,18 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
+	if (onFloor() || this->overlapping)
+	{
+		this->rotation.z *= 0;
+	}
+	else
+	{
+		if (this->rotation.z > TWO_PI)
+		{
+			this->rotation.z -= TWO_PI;
+		}
+		this->rotation.z += TWO_PI * deltaTime;
+	}
 }
 
 void Player::addForce(Point2 force)

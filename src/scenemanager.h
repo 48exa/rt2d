@@ -28,7 +28,6 @@ public:
 	bool landingCollision(Obstacle *obstacle);
 
 private:
-	bool overlapping;
 	std::vector<Obstacle *> obstacles;
 	uint16_t gravityVal;
 	Point2 gravity;

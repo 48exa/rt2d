@@ -123,14 +123,7 @@ void Scene01::update(float deltaTime)
 	if (f > 15) { f = 0; }
 
 	animated_entity->sprite()->frame(f);
-	if (t.seconds() > 0.25f) {
-		static RGBAColor rgb = RED;
-		animated_entity->sprite()->color = rgb;
-		rgb = Color::rotate(rgb, 0.025f);
-
-		f++;
-		t.start();
-	}
+ 
 
 	// ###############################################################
 	// ui_element uvoffset

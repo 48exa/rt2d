@@ -10,6 +10,7 @@ class Player : public Entity
 public:
 	Point2 velocity;
 	Point2 acceleration;
+	bool overlapping;
 
 	Player();
 	virtual ~Player();
@@ -23,7 +24,8 @@ public:
 	void setOnFloor();
 
 private:
-	/* add your private declarations */
+	int rotationSpeed;
+	double quarter_pi;
 };
 
 #endif /* PLAYER_H */
