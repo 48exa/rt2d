@@ -8,8 +8,8 @@
 class Player : public Entity
 {
 public:
-	Point2 velocity;
-	Point2 acceleration;
+	Vector2 velocity;
+	Vector2 acceleration;
 	bool overlapping;
 
 	Player();
@@ -17,7 +17,7 @@ public:
 
 	virtual void update(float deltaTime);
 	bool onFloor();
-	void addForce(Point2 force);
+	void addForce(Vector2 force);
 	void jump();
 	void movement(float deltaTime);
 	void resetMovement();

@@ -21,8 +21,8 @@ OPTION(MAKE_MATRIXPIXEL "Make MatrixPixel application" ON)
 OPTION(USE_RS232 "Use RS232 library" OFF)
 OPTION(MAKE_SERIAL "Make serial application" OFF)
 
-OPTION(USE_OPENAL "Use OpenAL library" OFF)
-OPTION(MAKE_AUDIOSTART "Make OpenAL/RT2D audiostart" OFF)
+OPTION(USE_OPENAL "Use OpenAL library" ON)
+OPTION(MAKE_AUDIOSTART "Make OpenAL/RT2D audiostart" ON)
 OPTION(MAKE_OPENAL_TONEGEN "Make OpenAL Tone Generator" OFF)
 
 OPTION(USE_BOX2D "Use Box2D" OFF)
@@ -173,23 +173,23 @@ ENDIF()
 # src                                                            #
 ####################################################################
 IF(MAKE_START)
-	add_executable(src
-		src/main.cpp
-		src/scenemanager.cpp
-		src/scenemanager.h
-		src/player.cpp
-		src/player.h
-		src/obstacle.cpp
-		src/obstacle.h
-		src/obstaclelayer.cpp
-		src/obstaclelayer.h
+	add_executable(jumper
+		jumper/main.cpp
+		jumper/jumper01.cpp
+		jumper/jumper01.h
+		jumper/player.cpp
+		jumper/player.h
+		jumper/obstacle.cpp
+		jumper/obstacle.h
+		jumper/obstaclelayer.cpp
+		jumper/obstaclelayer.h
 	)
-	target_link_libraries(src
+	target_link_libraries(jumper
 		${ALL_GRAPHICS_LIBS}
 	)
 	# Copy assets to the build directory
 	file(
-		COPY src/assets
+		COPY jumper/assets
 		DESTINATION ${CMAKE_BINARY_DIR}
 	)
 ENDIF()

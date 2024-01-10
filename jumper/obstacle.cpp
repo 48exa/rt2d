@@ -2,7 +2,7 @@
 
 #include "obstacle.h"
 
-Obstacle::Obstacle(Point2 pos, bool hostile, std::string spritePath) : Entity()
+Obstacle::Obstacle(Vector2 pos, bool hostile, std::string spritePath) : Entity()
 {
   this->position = pos;
   this->hostile = hostile;

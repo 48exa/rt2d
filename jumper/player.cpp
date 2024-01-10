@@ -31,7 +31,7 @@ void Player::update(float deltaTime)
 	}
 }
 
-void Player::addForce(Point2 force)
+void Player::addForce(Vector2 force)
 {
 	this->acceleration += force;
 }
@@ -43,11 +43,11 @@ bool Player::onFloor()
 
 void Player::jump()
 {
-	this->velocity -= Point2(0.0, 1350);
-	// this->addForce(Point2(0.0, 5500 * 100000000));
+	this->velocity -= Vector2(0.0, 1350);
 }
 
 void Player::movement(float deltaTime)
+
 {
 	this->velocity += this->acceleration * deltaTime;
 	this->position += this->velocity * deltaTime;

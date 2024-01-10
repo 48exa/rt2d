@@ -9,7 +9,7 @@ class Obstacle : public Entity
 {
 public:
 	bool hostile;
-	Obstacle(Point2 pos, bool hostile, std::string spritePath);
+	Obstacle(Vector2 pos, bool hostile, std::string spritePath);
 	virtual ~Obstacle();
 
 	virtual void update(float deltaTime);

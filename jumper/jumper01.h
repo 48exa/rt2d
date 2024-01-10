@@ -3,7 +3,7 @@
  *
  * @file myscene.h
  *
- * @brief description of SceneManager behavior.
+ * @brief description of JMPR01 behavior.
  */
 
 #ifndef MYSCENE_H
@@ -17,11 +17,11 @@
 
 #define GRAVITY (5500)
 
-class SceneManager : public Scene
+class Jumper01 : public Scene
 {
 public:
-	SceneManager();
-	virtual ~SceneManager();
+	Jumper01();
+	virtual ~Jumper01();
 
 	virtual void update(float deltaTime);
 	bool AABB(Obstacle *obstacle);
@@ -30,7 +30,7 @@ public:
 private:
 	std::vector<Obstacle *> obstacles;
 	uint16_t gravityVal;
-	Point2 gravity;
+	Vector2 gravity;
 
 	ObstacleLayer *layer;
 	Player *player;
