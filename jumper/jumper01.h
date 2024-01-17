@@ -26,6 +26,7 @@ public:
 	virtual void update(float deltaTime);
 	bool AABB(Obstacle *obstacle);
 	bool landingCollision(Obstacle *obstacle);
+	bool circleAABB(Obstacle *obstacle);
 
 private:
 	std::vector<Obstacle *> obstacles;

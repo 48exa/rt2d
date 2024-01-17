@@ -8,7 +8,7 @@
 #define COLLIDER_H
 
 #include <algorithm> // std::min + std::max
-#include <rt2d/pointx.h> // Point2
+#include <pointx.h> // Point2
 
 struct Circle {
 	float x;
