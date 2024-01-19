@@ -6,6 +6,7 @@
 #include <entity.h>
 
 #define GROUND_PLAYER_OFFSET (688)
+#define JUMP_VALUE (1350)
 
 class Player : public Entity
 {
