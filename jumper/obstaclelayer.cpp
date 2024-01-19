@@ -13,7 +13,7 @@ ObstacleLayer::~ObstacleLayer()
 
 void ObstacleLayer::update(float deltaTime)
 {
-	this->position += Vector2(-333, 0) * deltaTime;
+	this->position += Vector2(MOVEMENT_SPEED, 0) * deltaTime;
 }
 
 void ObstacleLayer::resetPosition()
