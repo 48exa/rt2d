@@ -38,7 +38,7 @@ void Player::addForce(Vector2 force)
 
 bool Player::onFloor()
 {
-	return this->position.y < SHEIGHT - 32 ? false : true;
+	return this->position.y < GROUND_PLAYER_OFFSET ? false : true;
 }
 
 void Player::jump()
@@ -61,5 +61,5 @@ void Player::resetMovement()
 
 void Player::setOnFloor()
 {
-	this->position.y = SHEIGHT - 32;
+	this->position.y = GROUND_PLAYER_OFFSET;
 }

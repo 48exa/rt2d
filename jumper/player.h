@@ -5,6 +5,8 @@
 
 #include <entity.h>
 
+#define GROUND_PLAYER_OFFSET (688)
+
 class Player : public Entity
 {
 public:

@@ -16,6 +16,9 @@
 #include "obstaclelayer.h"
 
 #define GRAVITY (5500)
+#define SPIKE_HITBOX_RADIUS (19)
+#define SPIKE_HITBOX_RADIUS_SQUARED (361)
+#define SPIKE_HITBOX_Y_OFFSET (12)
 
 class Jumper01 : public Scene
 {
