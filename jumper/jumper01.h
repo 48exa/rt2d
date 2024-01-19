@@ -30,6 +30,7 @@ public:
 	bool AABB(Obstacle *obstacle);
 	bool landingCollision(Obstacle *obstacle);
 	bool circleAABB(Obstacle *obstacle);
+	void initLevel();
 
 private:
 	std::vector<Obstacle *> obstacles;

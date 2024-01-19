@@ -27,6 +27,25 @@ Jumper01::Jumper01() : Scene()
 	player = new Player();
 	player->position = Vector2(SWIDTH / 2, SHEIGHT / 2);
 
+	// create the scene 'tree'
+	// add player to this Scene as a child.
+	this->addChild(player);
+
+	initLevel();
+}
+
+Jumper01::~Jumper01()
+{
+	// deconstruct and delete the Tree
+	this->removeChild(player);
+
+	// delete player from the heap (there was a 'new' in the constructor)
+	delete player;
+	delete layer;
+}
+
+void Jumper01::initLevel()
+{
 	// initiate all obstacles
 	obstacles.push_back(new Obstacle(Vector2(900, GROUND_PLAYER_OFFSET), true));
 
@@ -47,9 +66,6 @@ Jumper01::Jumper01() : Scene()
 
 	obstacles.push_back(new Obstacle(Vector2(1524, GROUND_PLAYER_OFFSET), true));
 	obstacles.push_back(new Obstacle(Vector2(1588, GROUND_PLAYER_OFFSET), true));
-	// create the scene 'tree'
-	// add player to this Scene as a child.
-	this->addChild(player);
 
 	for (const auto obstacle : obstacles)
 	{
@@ -57,16 +73,6 @@ Jumper01::Jumper01() : Scene()
 	}
 
 	this->addChild(layer);
-}
-
-Jumper01::~Jumper01()
-{
-	// deconstruct and delete the Tree
-	this->removeChild(player);
-
-	// delete player from the heap (there was a 'new' in the constructor)
-	delete player;
-	delete layer;
 }
 
 bool Jumper01::AABB(Obstacle *obstacle)
