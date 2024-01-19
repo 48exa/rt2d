@@ -29,6 +29,12 @@ void Player::update(float deltaTime)
 		}
 		this->rotation.z += TWO_PI * deltaTime;
 	}
+
+	if (this->onFloor())
+	{
+		this->setOnFloor();
+		this->resetMovement();
+	}
 }
 
 void Player::addForce(Vector2 force)

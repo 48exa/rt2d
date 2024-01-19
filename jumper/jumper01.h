@@ -31,6 +31,7 @@ public:
 	bool landingCollision(Obstacle *obstacle);
 	bool circleAABB(Obstacle *obstacle);
 	void initLevel();
+	void handleMiscKeyEvents();
 
 private:
 	std::vector<Obstacle *> obstacles;

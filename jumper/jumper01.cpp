@@ -97,14 +97,37 @@ bool Jumper01::circleAABB(Obstacle *obstacle)
 	return (DeltaX * DeltaX + DeltaY * DeltaY) < (SPIKE_HITBOX_RADIUS_SQUARED);
 }
 
-void Jumper01::update(float deltaTime)
+void Jumper01::handleMiscKeyEvents()
 {
-	player->sprite()->color = WHITE;
-
 	if (input()->getKeyUp(KeyCode::Escape))
 	{
 		this->stop();
 	}
+
+	if (input()->getKey(KeyCode::Space))
+	{
+		if (player->onFloor() || player->overlapping)
+		{
+			player->jump();
+		}
+	}
+
+	if (input()->getKeyDown(KeyCode::A))
+	{
+		obstacles.push_back(new Obstacle(Vector2(1000 - layer->position.x, GROUND_PLAYER_OFFSET), false));
+		layer->addChild(obstacles.back());
+	}
+
+	if (input()->getKeyDown(KeyCode::R))
+	{
+		layer->resetPosition();
+	}
+}
+
+void Jumper01::update(float deltaTime)
+{
+	player->sprite()->color = WHITE;
+	handleMiscKeyEvents();
 
 	// addforce
 	player->addForce(this->gravity);
@@ -140,30 +163,5 @@ void Jumper01::update(float deltaTime)
 		{
 			layer->resetPosition();
 		}
-	}
-
-	if (player->onFloor())
-	{
-		player->setOnFloor();
-		player->resetMovement();
-	}
-
-	if (input()->getKey(KeyCode::Space))
-	{
-		if (player->onFloor() || player->overlapping)
-		{
-			player->jump();
-		}
-	}
-
-	if (input()->getKeyDown(KeyCode::A))
-	{
-		obstacles.push_back(new Obstacle(Vector2(1000 - layer->position.x, GROUND_PLAYER_OFFSET), false));
-		layer->addChild(obstacles.back());
-	}
-
-	if (input()->getKeyDown(KeyCode::R))
-	{
-		layer->resetPosition();
 	}
 }
