@@ -17,8 +17,8 @@
 
 #define GRAVITY (5500)
 #define SPIKE_HITBOX_RADIUS (19)
-#define SPIKE_HITBOX_RADIUS_SQUARED (361)
-#define SPIKE_HITBOX_Y_OFFSET (12)
+#define РАДИУС_ХИТБОКСА_ШИПА_В_КВАДРАТЕ (361) // SPIKE_HITBOX_RADIUS_SQUARED
+#define СМЕЩЕНИЕ_ХИТБОКСА_ШИПА_ПО_Y (12)			// SPIKE_HITBOX_Y_OFFSET
 
 class Jumper01 : public Scene
 {

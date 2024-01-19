@@ -77,6 +77,7 @@ void Jumper01::initLevel()
 
 bool Jumper01::AABB(Obstacle *obstacle)
 {
+	// да иди ты нахуй завали ебало
 	return (player->position.x < obstacle->position.x + obstacle->sprite()->size.x + layer->position.x &&
 					player->position.x - player->sprite()->size.x - layer->position.x > obstacle->position.x - obstacle->sprite()->size.x * 2 &&
 					player->position.y < obstacle->position.y + obstacle->sprite()->size.y - layer->position.y &&
@@ -93,8 +94,8 @@ bool Jumper01::landingCollision(Obstacle *obstacle)
 bool Jumper01::circleAABB(Obstacle *obstacle)
 {
 	float DeltaX = obstacle->position.x + layer->position.x + (obstacle->sprite()->size.x / 2) - std::max(player->position.x, std::min(obstacle->position.x + layer->position.x + (obstacle->sprite()->size.x / 2), player->position.x + player->sprite()->size.x));
-	float DeltaY = obstacle->position.y + layer->position.y + SPIKE_HITBOX_Y_OFFSET - std::max(player->position.y, std::min(obstacle->position.y + layer->position.y + SPIKE_HITBOX_Y_OFFSET, player->position.y + player->sprite()->size.y));
-	return (DeltaX * DeltaX + DeltaY * DeltaY) < (SPIKE_HITBOX_RADIUS_SQUARED);
+	float DeltaY = obstacle->position.y + layer->position.y + СМЕЩЕНИЕ_ХИТБОКСА_ШИПА_ПО_Y - std::max(player->position.y, std::min(obstacle->position.y + layer->position.y + СМЕЩЕНИЕ_ХИТБОКСА_ШИПА_ПО_Y, player->position.y + player->sprite()->size.y));
+	return (DeltaX * DeltaX + DeltaY * DeltaY) < (РАДИУС_ХИТБОКСА_ШИПА_В_КВАДРАТЕ);
 }
 
 void Jumper01::handleMiscKeyEvents()
