@@ -67,11 +67,13 @@ void Jumper01::initLevel()
 	obstacles.push_back(new Obstacle(Vector2(1524, GROUND_PLAYER_OFFSET), true));
 	obstacles.push_back(new Obstacle(Vector2(1588, GROUND_PLAYER_OFFSET), true));
 
+	// add all obstacles to the vector
 	for (const auto obstacle : obstacles)
 	{
 		layer->addChild(obstacle);
 	}
 
+	// add the layer to the scene
 	this->addChild(layer);
 }
 
@@ -114,6 +116,7 @@ void Jumper01::handleMiscKeyEvents()
 
 	if (input()->getKeyDown(KeyCode::A))
 	{
+		// add a new obstacle to 1000 pixels from the current layer position
 		obstacles.push_back(new Obstacle(Vector2(1000 - layer->position.x, GROUND_PLAYER_OFFSET), false));
 		layer->addChild(obstacles.back());
 	}
@@ -126,7 +129,6 @@ void Jumper01::handleMiscKeyEvents()
 
 void Jumper01::update(float deltaTime)
 {
-	player->sprite()->color = WHITE;
 	handleMiscKeyEvents();
 
 	// addforce
@@ -136,6 +138,8 @@ void Jumper01::update(float deltaTime)
 	player->movement(deltaTime);
 
 	player->overlapping = false;
+
+	// loop over all obstacles to check for collision with the player
 	for (const auto obstacle : obstacles)
 	{
 		if (obstacle->hostile)
@@ -147,6 +151,7 @@ void Jumper01::update(float deltaTime)
 			continue;
 		}
 
+		// if the player is not colliding go back to the top
 		if (!AABB(obstacle))
 		{
 			continue;

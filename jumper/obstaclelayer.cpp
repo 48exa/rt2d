@@ -13,6 +13,7 @@ ObstacleLayer::~ObstacleLayer()
 
 void ObstacleLayer::update(float deltaTime)
 {
+	// move the object layer at a consistent speed to simulate the player moving
 	this->position += Vector2(MOVEMENT_SPEED, 0) * deltaTime;
 }
 

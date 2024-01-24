@@ -17,6 +17,7 @@ Player::~Player()
 
 void Player::update(float deltaTime)
 {
+	// rotate the player if the player is in the air
 	if (onFloor() || this->overlapping)
 	{
 		this->rotation.z *= 0;
