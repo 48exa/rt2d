@@ -9,6 +9,7 @@ ObstacleLayer::ObstacleLayer() : Entity()
 
 ObstacleLayer::~ObstacleLayer()
 {
+	delete this;
 }
 
 void ObstacleLayer::update(float deltaTime)
@@ -21,3 +22,4 @@ void ObstacleLayer::resetPosition()
 {
 	this->position.x = this->originalPosition;
 }
+

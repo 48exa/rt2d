@@ -13,6 +13,9 @@ public:
 	virtual ~Obstacle();
 
 	virtual void update(float deltaTime);
+	/// @brief getter for private boolean hostile
+	/// @return hostile boolean
+	bool isHostile();
 
 private:
 	/* add your private declarations */

@@ -37,7 +37,13 @@ Jumper01::Jumper01() : Scene()
 Jumper01::~Jumper01()
 {
 	// deconstruct and delete the Tree
+	this->removeChild(layer);
 	this->removeChild(player);
+	for (const auto obstacle : obstacles)
+	{
+		layer->removeChild(obstacle);
+		delete obstacle;
+	}
 
 	// delete player from the heap (there was a 'new' in the constructor)
 	delete player;
@@ -142,7 +148,7 @@ void Jumper01::update(float deltaTime)
 	// loop over all obstacles to check for collision with the player
 	for (const auto obstacle : obstacles)
 	{
-		if (obstacle->hostile)
+		if (obstacle->isHostile())
 		{
 			if (circleAABB(obstacle))
 			{

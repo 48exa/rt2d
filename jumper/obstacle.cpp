@@ -18,9 +18,14 @@ Obstacle::Obstacle(Vector2 pos, bool hostile) : Entity()
 
 Obstacle::~Obstacle()
 {
+  delete this;
 }
 
 void Obstacle::update(float deltaTime)
 {
 }
 
+bool Obstacle::isHostile()
+{
+  return this->hostile;
+}

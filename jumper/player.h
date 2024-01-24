@@ -36,8 +36,6 @@ public:
 	void setOnFloor();
 
 private:
-	int rotationSpeed;
-	double quarter_pi;
 };
 
 #endif /* PLAYER_H */
