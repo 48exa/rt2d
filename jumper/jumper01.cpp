@@ -166,7 +166,7 @@ void Jumper01::update(float deltaTime)
 		if (landingCollision(obstacle))
 		{
 			// set the player ontop of the obstacle
-			player->position.y = obstacle->position.y - obstacle->sprite()->size.y;
+			player->position.y = obstacle->position.y - obstacle->sprite()->size.y;  
 			player->overlapping = true;
 			player->resetMovement();
 		}
