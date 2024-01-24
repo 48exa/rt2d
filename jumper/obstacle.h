@@ -13,7 +13,6 @@ public:
 	virtual ~Obstacle();
 
 	virtual void update(float deltaTime);
-	void drawSpikeHitbox(int posx, int posy);
 
 private:
 	/* add your private declarations */

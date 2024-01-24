@@ -12,6 +12,7 @@ public:
 	virtual ~ObstacleLayer();
 
 	void update(float deltaTime);
+	/// @brief Resets the objectLayer back to its original position, giving the illusion the level has restarted
 	void resetPosition();
 
 private:

@@ -24,8 +24,3 @@ void Obstacle::update(float deltaTime)
 {
 }
 
-void Obstacle::drawSpikeHitbox(int posx, int posy)
-{
-  ddClear();
-  ddCircle(posx, posy, 32, GREEN);
-}

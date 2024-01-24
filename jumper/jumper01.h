@@ -3,7 +3,7 @@
  *
  * @file myscene.h
  *
- * @brief description of JMPR01 behavior.
+ * @brief description of Jumper01 behavior.
  */
 
 #ifndef MYSCENE_H
@@ -17,20 +17,31 @@
 
 #define GRAVITY (5500)
 #define SPIKE_HITBOX_RADIUS (19)
-#define РАДИУС_ХИТБОКСА_ШИПА_В_КВАДРАТЕ (361) // SPIKE_HITBOX_RADIUS_SQUARED
-#define СМЕЩЕНИЕ_ХИТБОКСА_ШИПА_ПО_Y (12)			// SPIKE_HITBOX_Y_OFFSET
+#define SPIKE_HITBOX_RADIUS_SQUARED (361)
+#define SPIKE_HITBOX_Y_OFFSET (12)
 
 class Jumper01 : public Scene
 {
 public:
 	Jumper01();
 	virtual ~Jumper01();
-
 	virtual void update(float deltaTime);
+
+	/// @brief Rectangle to rectangle collision detection
+	/// @param obstacle Obstacle that could collide with the player
+	/// @return true if collision is happening
 	bool AABB(Obstacle *obstacle);
+	/// @brief Specialized version of AABB() that checks if the player is landing ontop of an obstacle
+	/// @param obstacle Obstacle that could collide with the player
+	/// @return true if the type of collision is landing
 	bool landingCollision(Obstacle *obstacle);
+	/// @brief Circle to rectangle collision
+	/// @param obstacle Obstacle that could collide with the player
+	/// @return true if collision is happening
 	bool circleAABB(Obstacle *obstacle);
+	/// @brief Generate the obstacles in a leven and push them to the objectLayer<>
 	void initLevel();
+	/// @brief Handles miscellaneous
 	void handleMiscKeyEvents();
 
 private:

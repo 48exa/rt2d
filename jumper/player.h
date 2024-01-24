@@ -19,11 +19,20 @@ public:
 	virtual ~Player();
 
 	virtual void update(float deltaTime);
+	/// @brief Checks if the player is on the bottom of the window
+	/// @return True if the player is on the bottom of the window
 	bool onFloor();
+	/// @brief Add acceleration force to the player
+	/// @param force Vector2 of for x and y velocity
 	void addForce(Vector2 force);
+	/// @brief Makes the player jump
 	void jump();
+	/// @brief General movement that needs to run every update
+	/// @param deltaTime
 	void movement(float deltaTime);
+	/// @brief Resets the acceleration to circumvent clipping
 	void resetMovement();
+	/// @brief Sets the player on the bottom of the window
 	void setOnFloor();
 
 private:
