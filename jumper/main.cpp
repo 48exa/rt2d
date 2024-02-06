@@ -27,8 +27,8 @@ int main(void)
 	Jumper01 *jumper01 = new Jumper01(); // create Scene on the heap
 	while (jumper01->isRunning())
 	{												 // check status of Scene every frame
-		core.run(jumper01);			 // update and render the current scene
-		core.showFrameRate(0.075); // show framerate in output every n seconds
+		core.run(jumper01);		 // update and render the current scene
+		core.showFrameRate(1); // show framerate in output every n seconds
 	}
 	// core.cleanup(); // cleanup ResourceManager (Textures + Meshes, but not Shaders)
 	delete jumper01; // delete Scene and everything in it from the heap to make space for next Scene
