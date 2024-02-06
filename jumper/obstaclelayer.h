@@ -4,7 +4,7 @@
 #define OBSTACLELAYER_H
 
 #include <entity.h>
-#define MOVEMENT_SPEED (-333)
+#define MOVEMENT_SPEED (-400)
 class ObstacleLayer : public Entity
 {
 public:

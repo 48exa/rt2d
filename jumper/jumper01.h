@@ -42,7 +42,12 @@ public:
 	bool circleAABB(Obstacle *obstacle);
 	/// @brief Handles miscellaneous
 	void handleMiscKeyEvents();
+	/// @brief Creates the level by reading in a bytearray that dictates the position and type of obstacle
+	/// @param bytearray Int vector containing 8 bit signed integers
 	void level_creator(std::vector<int> bytearray);
+	/// @brief Places the obstacles based on info from the level creator
+	/// @param chunk Byte from a bytearray
+	/// @param hostile Boolean that dictates if the obstacle is a spike or a square
 	void place_obstacle(int chunk, bool hostile);
 
 private:
