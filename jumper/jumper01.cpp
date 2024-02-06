@@ -33,6 +33,7 @@ Jumper01::Jumper01() : Scene()
 	// add player to this Scene as a child.
 	this->addChild(player);
 
+	// The level in 8 bit signed ints
 	std::vector<int> level_layout{
 			0, 0, 129, 129, 1, 129, 67, 18, 18, 67,
 			129, 129, 129, 1, 32, 84, 32, 0, 131, 128,
@@ -65,18 +66,25 @@ Jumper01::~Jumper01()
 
 void Jumper01::place_obstacle(int chunk, bool hostile)
 {
+	// Make a decrementing for loop that runs 8 times
 	for (uint8_t i = 8; i > 0; --i)
 	{
+		// Use bitwise AND to compare the chunk and 128 in hex, if the binary representation of the
+		// chunk contains a 1 on any of the first 7 spots we will place an obstacle
+		// (most significant bit is used to determine obstacle type, 0 for square, 1 for spike)
 		if (0x80 & chunk && i < 8)
 			obstacles.push_back(new Obstacle(Vector2(distance, 752 - (64 * i)), hostile));
+		// Bitshift to the left by one
 		chunk = chunk << 1;
 	}
 }
 
 void Jumper01::level_creator(std::vector<int> bytearray)
 {
+	// Loop over every number in the vector of ints
 	for (int chunk : bytearray)
 	{
+		// If the number is bigger than 128 (0b10000000) it places a spike
 		if (chunk >= 128)
 			place_obstacle(chunk, true);
 		else
