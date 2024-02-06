@@ -16,6 +16,8 @@ Jumper01::Jumper01() : Scene()
 	t.start();
 	layer = new ObstacleLayer();
 
+	this->distance = 900;
+
 	// initialise the gravity
 	this->gravity = Vector2(0.0, GRAVITY);
 
@@ -31,7 +33,23 @@ Jumper01::Jumper01() : Scene()
 	// add player to this Scene as a child.
 	this->addChild(player);
 
-	initLevel();
+	// initLevel();
+	std::vector<int> level_layout{
+			0b00000000,
+			0b00000000,
+			0b10000001,
+			0b10000001,
+			0b00000001,
+			0b10000001,
+			0b01000011,
+			0b00010010,
+			0b00010010,
+			0b01000011,
+			0b10000001,
+			0b10000001,
+			0b00000001,
+	};
+	level_creator(level_layout);
 }
 
 Jumper01::~Jumper01()
@@ -39,7 +57,7 @@ Jumper01::~Jumper01()
 	// deconstruct and delete the Tree
 	this->removeChild(layer);
 	this->removeChild(player);
-	for (const auto obstacle : obstacles)
+	for (auto const &obstacle : obstacles)
 	{
 		layer->removeChild(obstacle);
 		delete obstacle;
@@ -50,37 +68,35 @@ Jumper01::~Jumper01()
 	delete layer;
 }
 
-void Jumper01::initLevel()
+void Jumper01::place_obstacle(int chunk, bool hostile)
 {
-	// initiate all obstacles
-	obstacles.push_back(new Obstacle(Vector2(900, GROUND_PLAYER_OFFSET), true));
-
-	obstacles.push_back(new Obstacle(Vector2(1100, GROUND_PLAYER_OFFSET), false));
-	obstacles.push_back(new Obstacle(Vector2(1100, GROUND_PLAYER_OFFSET - 64), false));
-
-	obstacles.push_back(new Obstacle(Vector2(1270, GROUND_PLAYER_OFFSET), false));
-	obstacles.push_back(new Obstacle(Vector2(1334, GROUND_PLAYER_OFFSET), false));
-
-	for (size_t i = 0; i < 4; i++)
+	for (uint8_t i = 8; i > 0; --i)
 	{
-		obstacles.push_back(new Obstacle(Vector2(1280, (GROUND_PLAYER_OFFSET - 128) - 64 * i), false));
+		if (0x80 & chunk && i < 8)
+			obstacles.push_back(new Obstacle(Vector2(distance, 752 - (64 * i)), hostile));
+		chunk = chunk << 1;
 	}
-	for (size_t i = 0; i < 3; i++)
+}
+
+void Jumper01::level_creator(std::vector<int> bytearray)
+{
+	for (int chunk : bytearray)
 	{
-		obstacles.push_back(new Obstacle(Vector2(1460, GROUND_PLAYER_OFFSET - (64 * i)), false));
+		if (chunk >= 128)
+			place_obstacle(chunk, true);
+		else
+			place_obstacle(chunk, false);
+		distance += 64;
+
+		// add all obstacles to the vector
+		for (auto const &obstacle : obstacles)
+		{
+			layer->addChild(obstacle);
+		}
+
+		// add the layer to the scene
+		this->addChild(layer);
 	}
-
-	obstacles.push_back(new Obstacle(Vector2(1524, GROUND_PLAYER_OFFSET), true));
-	obstacles.push_back(new Obstacle(Vector2(1588, GROUND_PLAYER_OFFSET), true));
-
-	// add all obstacles to the vector
-	for (const auto obstacle : obstacles)
-	{
-		layer->addChild(obstacle);
-	}
-
-	// add the layer to the scene
-	this->addChild(layer);
 }
 
 bool Jumper01::AABB(Obstacle *obstacle)
@@ -98,27 +114,29 @@ bool Jumper01::landingCollision(Obstacle *obstacle)
 					player->position.y < obstacle->position.y - obstacle->sprite()->size.y / 2);
 }
 
+// https://yal.cc/rectangle-circle-intersection-test/
 bool Jumper01::circleAABB(Obstacle *obstacle)
 {
-	float DeltaX = obstacle->position.x + layer->position.x + (obstacle->sprite()->size.x / 2) - std::max(player->position.x, std::min(obstacle->position.x + layer->position.x + (obstacle->sprite()->size.x / 2), player->position.x + player->sprite()->size.x));
-	float DeltaY = obstacle->position.y + layer->position.y + SPIKE_HITBOX_Y_OFFSET - std::max(player->position.y, std::min(obstacle->position.y + layer->position.y + SPIKE_HITBOX_Y_OFFSET, player->position.y + player->sprite()->size.y));
-	return (DeltaX * DeltaX + DeltaY * DeltaY) < (SPIKE_HITBOX_RADIUS_SQUARED);
+	float CircleX = obstacle->position.x + layer->position.x + 32;
+	float CircleY = obstacle->position.y + layer->position.y + 32;
+	float RectX = player->position.x;
+	float RectY = player->position.y;
+	float RectWidth = player->sprite()->size.x;
+	float RectHeight = player->sprite()->size.y;
+
+	float DeltaX = CircleX - std::max(RectX, std::min(CircleX, RectX + RectWidth));
+	float DeltaY = CircleY - std::max(RectY, std::min(CircleY, RectY + RectHeight));
+	return (DeltaX * DeltaX + DeltaY * DeltaY) < (16 * 16);
 }
 
 void Jumper01::handleMiscKeyEvents()
 {
 	if (input()->getKeyUp(KeyCode::Escape))
-	{
 		this->stop();
-	}
 
 	if (input()->getKey(KeyCode::Space))
-	{
 		if (player->onFloor() || player->overlapping)
-		{
 			player->jump();
-		}
-	}
 
 	if (input()->getKeyDown(KeyCode::A))
 	{
@@ -128,9 +146,7 @@ void Jumper01::handleMiscKeyEvents()
 	}
 
 	if (input()->getKeyDown(KeyCode::R))
-	{
 		layer->resetPosition();
-	}
 }
 
 void Jumper01::update(float deltaTime)
@@ -146,14 +162,12 @@ void Jumper01::update(float deltaTime)
 	player->overlapping = false;
 
 	// loop over all obstacles to check for collision with the player
-	for (const auto obstacle : obstacles)
+	for (auto const &obstacle : obstacles)
 	{
 		if (obstacle->isHostile())
 		{
 			if (circleAABB(obstacle))
-			{
 				layer->resetPosition();
-			}
 			continue;
 		}
 
@@ -166,13 +180,11 @@ void Jumper01::update(float deltaTime)
 		if (landingCollision(obstacle))
 		{
 			// set the player ontop of the obstacle
-			player->position.y = obstacle->position.y - obstacle->sprite()->size.y;  
+			player->position.y = obstacle->position.y - obstacle->sprite()->size.y;
 			player->overlapping = true;
 			player->resetMovement();
 		}
 		else
-		{
 			layer->resetPosition();
-		}
 	}
 }

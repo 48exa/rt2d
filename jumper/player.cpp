@@ -48,7 +48,7 @@ bool Player::onFloor()
 
 void Player::jump()
 {
-	this->velocity -= Vector2(0.0, JUMP_VALUE);
+	this->velocity -= Vector2(0.0, JUMP_VALUE); 
 }
 
 void Player::movement(float deltaTime)

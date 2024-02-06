@@ -17,7 +17,7 @@
 
 #define GRAVITY (5500)
 #define SPIKE_HITBOX_RADIUS (19)
-#define SPIKE_HITBOX_RADIUS_SQUARED (361)
+
 #define SPIKE_HITBOX_Y_OFFSET (12)
 
 class Jumper01 : public Scene
@@ -40,12 +40,13 @@ public:
 	/// @param obstacle Obstacle that could collide with the player
 	/// @return true if collision is happening
 	bool circleAABB(Obstacle *obstacle);
-	/// @brief Generate the obstacles in a leven and push them to the objectLayer<>
-	void initLevel();
 	/// @brief Handles miscellaneous
 	void handleMiscKeyEvents();
+	void level_creator(std::vector<int> bytearray);
+	void place_obstacle(int chunk, bool hostile);
 
 private:
+	int distance;
 	std::vector<Obstacle *> obstacles;
 	uint16_t gravityVal;
 	Vector2 gravity;
