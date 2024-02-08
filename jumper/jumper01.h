@@ -49,6 +49,7 @@ public:
 	/// @param chunk Byte from a bytearray
 	/// @param hostile Boolean that dictates if the obstacle is a spike or a square
 	void place_obstacle(int chunk, bool hostile);
+	bool in_collision_range(Obstacle *obstacle);
 
 private:
 	int distance;

@@ -10,6 +10,8 @@
 
 #include "jumper01.h"
 
+#define COLLIDER_DEBUG true
+
 Jumper01::Jumper01() : Scene()
 {
 	// start the timer.
@@ -152,6 +154,14 @@ void Jumper01::handleMiscKeyEvents()
 		layer->resetPosition();
 }
 
+bool Jumper01::in_collision_range(Obstacle *obstacle)
+{
+	return obstacle->position.x + layer->position.x > player->position.x - 64 &&
+				 obstacle->position.x + layer->position.x < player->position.x + 128 &&
+				 obstacle->position.y > player->position.y - 128 &&
+				 obstacle->position.y < player->position.y + 128;
+}
+
 void Jumper01::update(float deltaTime)
 {
 	handleMiscKeyEvents();
@@ -165,29 +175,38 @@ void Jumper01::update(float deltaTime)
 	player->overlapping = false;
 
 	// loop over all obstacles to check for collision with the player
-	for (auto const &obstacle : obstacles)
+	for (const auto &obstacle : obstacles)
 	{
-		if (obstacle->isHostile())
+#if COLLIDER_DEBUG true
+		obstacle->sprite()->color = RED;
+#endif
+		if (in_collision_range(obstacle))
 		{
-			if (circleAABB(obstacle))
+#if COLLIDER_DEBUG true
+			obstacle->sprite()->color = GREEN;
+#endif
+			if (obstacle->isHostile())
+			{
+				if (circleAABB(obstacle))
+					layer->resetPosition();
+				continue;
+			}
+
+			// if the player is not colliding go back to the top
+			if (!AABB(obstacle))
+			{
+				continue;
+			}
+
+			if (landingCollision(obstacle))
+			{
+				// set the player ontop of the obstacle
+				player->position.y = obstacle->position.y - obstacle->sprite()->size.y;
+				player->overlapping = true;
+				player->resetMovement();
+			}
+			else
 				layer->resetPosition();
-			continue;
 		}
-
-		// if the player is not colliding go back to the top
-		if (!AABB(obstacle))
-		{
-			continue;
-		}
-
-		if (landingCollision(obstacle))
-		{
-			// set the player ontop of the obstacle
-			player->position.y = obstacle->position.y - obstacle->sprite()->size.y;
-			player->overlapping = true;
-			player->resetMovement();
-		}
-		else
-			layer->resetPosition();
 	}
 }
