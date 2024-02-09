@@ -18,7 +18,7 @@ void ObstacleLayer::update(float deltaTime)
 	this->position += Vector2(MOVEMENT_SPEED, 0) * deltaTime;
 }
 
-void ObstacleLayer::resetPosition()
+const void ObstacleLayer::resetPosition()
 {
 	this->position.x = this->original_position;
 }

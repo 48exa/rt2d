@@ -1,9 +1,3 @@
-/**
- * This class describes Jumper behavior.
- *
- * Copyright 2015 Your Name <you@yourhost.com>
- */
-
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -35,8 +29,7 @@ Jumper::Jumper() : Scene()
 	// add player to this Scene as a child.
 	this->addChild(player);
 
-	// The level in 8 bit signed ints
-	std::vector<unsigned short> level_layout{
+	level_layout = {
 			0, 0, 129, 129, 1, 129, 67, 18, 18, 67,
 			129, 129, 129, 1, 32, 84, 32, 0, 131, 128,
 			3, 129, 129, 7, 129, 129, 15, 129, 129, 31,
@@ -46,7 +39,7 @@ Jumper::Jumper() : Scene()
 			60, 36, 44, 0, 60, 36, 44, 0, 52, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 127};
 
-	level_creator(level_layout);
+	level_creator(&level_layout);
 }
 
 Jumper::~Jumper()
@@ -54,7 +47,7 @@ Jumper::~Jumper()
 	// deconstruct and delete the Tree
 	this->removeChild(layer);
 	this->removeChild(player);
-	for (auto const &obstacle : obstacles)
+	for (Obstacle *const &obstacle : obstacles)
 	{
 		layer->removeChild(obstacle);
 		delete obstacle;
@@ -65,7 +58,7 @@ Jumper::~Jumper()
 	delete layer;
 }
 
-void Jumper::place_obstacle(unsigned short chunk, bool hostile)
+const void Jumper::place_obstacle(unsigned short chunk, const bool _hostile)
 {
 	// Make a decrementing for loop that runs 8 times
 	for (unsigned char i = 8; i > 0; --i)
@@ -74,16 +67,16 @@ void Jumper::place_obstacle(unsigned short chunk, bool hostile)
 		// chunk contains a 1 on any of the first 7 spots we will place an obstacle
 		// (most significant bit is used to determine obstacle type, 0 for square, 1 for spike)
 		if (0x80 & chunk && i < 8)
-			obstacles.push_back(new Obstacle(Vector2(_distance, 752 - (64 * i)), hostile));
+			obstacles.push_back(new Obstacle(Vector2(_distance, 752 - (64 * i)), _hostile));
 		// Bitshift to the left by one
 		chunk = chunk << 1;
 	}
 }
 
-void Jumper::level_creator(std::vector<unsigned short> bytearray)
+const void Jumper::level_creator(const std::vector<unsigned short> *bytearray)
 {
 	// Loop over every number in the vector of ints
-	for (unsigned short chunk : bytearray)
+	for (const unsigned short chunk : *bytearray)
 	{
 		// If the number is bigger than 128 (0b10000000) it places a spike
 		if (chunk >= 128)
@@ -93,7 +86,7 @@ void Jumper::level_creator(std::vector<unsigned short> bytearray)
 		_distance += 64;
 
 		// add all obstacles to the vector
-		for (auto const &obstacle : obstacles)
+		for (Obstacle *const &obstacle : obstacles)
 		{
 			layer->addChild(obstacle);
 		}
@@ -103,14 +96,14 @@ void Jumper::level_creator(std::vector<unsigned short> bytearray)
 	std::cout << "obstacles: " << obstacles.size() << std::endl;
 }
 
-bool Jumper::player_square_collision(Player *p, Obstacle *obs)
+const bool Jumper::player_square_collision(const Player *p, Obstacle *obs) const
 {
 	float CircleX = p->position.x + 32;
 	float CircleY = p->position.y + 32;
 	float RectX = obs->position.x + layer->position.x;
 	float RectY = obs->position.y + layer->position.y;
-	short RectWidth = obs->sprite()->size.x;
-	short RectHeight = obs->sprite()->size.y;
+	const unsigned char RectWidth = obs->sprite()->size.x;
+	const unsigned char RectHeight = obs->sprite()->size.y;
 
 	float DeltaX = CircleX - std::max(RectX, std::min(CircleX, RectX + RectWidth));
 	float DeltaY = CircleY - std::max(RectY, std::min(CircleY, RectY + RectHeight));
@@ -118,25 +111,25 @@ bool Jumper::player_square_collision(Player *p, Obstacle *obs)
 	return (DeltaX * DeltaX + DeltaY * DeltaY) < (PLAYER_HITBOX_SIZE * PLAYER_HITBOX_SIZE);
 }
 
-bool Jumper::player_spike_collision(Player *p, Obstacle *obs)
+const bool Jumper::player_spike_collision(const Player *p, const Obstacle *obs) const
 {
 	float dx = p->position.x - (obs->position.x + layer->position.x);
 	float dy = p->position.y - (obs->position.y + 8);
-	short radii = PLAYER_HITBOX_SIZE + SPIKE_HITBOX_SIZE;
+	unsigned char radii = PLAYER_HITBOX_SIZE + SPIKE_HITBOX_SIZE;
 
 	return (dx * dx + dy * dy) < (radii * radii);
 }
 
-bool Jumper::landing_collision(Player *p, Obstacle *obs)
+const bool Jumper::landing_collision(const Player *p, const Obstacle *obs) const
 {
-	unsigned short obj_size = 32;
+	unsigned char obj_size = 32;
 
 	return (p->position.x < (obs->position.x + obj_size) - layer->position.x &&
 					p->position.x + obj_size > (obs->position.x - obj_size) + layer->position.x &&
 					p->position.y < obs->position.y - obj_size);
 }
 
-void Jumper::handle_misc_key_events()
+const void Jumper::handle_misc_key_events()
 {
 	if (input()->getKeyUp(KeyCode::Escape))
 		this->stop();
@@ -156,10 +149,10 @@ void Jumper::handle_misc_key_events()
 		layer->resetPosition();
 }
 
-bool Jumper::in_collision_range(Obstacle *obstacle)
+const bool Jumper::in_collision_range(const Obstacle *obstacle) const
 {
-	short single_sprite_size = 64;
-	short one_half_sprite_size = 96;
+	unsigned char single_sprite_size = 64;
+	unsigned char one_half_sprite_size = 96;
 
 	return obstacle->position.x + layer->position.x > player->position.x - single_sprite_size &&
 				 obstacle->position.x + layer->position.x < player->position.x + one_half_sprite_size &&
@@ -186,7 +179,7 @@ void Jumper::update(float deltaTime)
 	player->overlapping = false;
 
 	// loop over all obstacles to check for collision with the player
-	for (const auto &obstacle : obstacles)
+	for (Obstacle *const &obstacle : obstacles)
 	{
 		obstacle->sprite()->color = WHITE;
 
@@ -204,7 +197,7 @@ void Jumper::update(float deltaTime)
 			obstacle->sprite()->color = GREEN;
 #endif
 
-			if (obstacle->isHostile())
+			if (obstacle->is_hostile())
 			{
 				if (player_spike_collision(player, obstacle))
 					layer->resetPosition();
@@ -213,9 +206,7 @@ void Jumper::update(float deltaTime)
 
 			// if the player is not colliding go back to the top
 			if (!player_square_collision(player, obstacle))
-			{
 				continue;
-			}
 
 			if (landing_collision(player, obstacle))
 			{

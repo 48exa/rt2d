@@ -1,4 +1,10 @@
-// player.h
+/**
+ * Copyright 2024 D. Westerdijk <westerdijk@protonmail.com>
+ *
+ * @file player.h
+ *
+ * @brief Behaviour of the player
+ */
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -17,25 +23,25 @@ public:
 
 	Player();
 	virtual ~Player();
-
 	virtual void update(float deltaTime);
+
 	/// @brief Checks if the player is on the bottom of the window
 	/// @return True if the player is on the bottom of the window
-	bool on_floor();
+	const bool on_floor() const;
+	/// @brief Makes the player jump
+	const void jump();
 	/// @brief Add acceleration force to the player
 	/// @param force Vector2 of for x and y velocity
-	void add_force(Vector2 force);
-	/// @brief Makes the player jump
-	void jump();
+	const void add_force(const Vector2 force);
 	/// @brief General movement that needs to run every update
 	/// @param deltaTime
-	void movement(float deltaTime);
+	const void movement(const float deltaTime);
 	/// @brief Resets the acceleration to circumvent clipping
-	void reset_movement();
-	/// @brief Sets the player on the bottom of the window
-	void set_on_floor();
+	const void reset_movement();
 
 private:
+	/// @brief Sets the player on the bottom of the window
+	const void set_on_floor();
 };
 
-#endif /* PLAYER_H */
+#endif

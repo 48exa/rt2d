@@ -1,4 +1,10 @@
-// obstacle.h
+/**
+ * Copyright 2024 D. Westerdijk <westerdijk@protonmail.com>
+ *
+ * @file obstacle.h
+ *
+ * @brief Behaviour of the obstacles
+ */
 
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
@@ -8,17 +14,16 @@
 class Obstacle : public Entity
 {
 public:
-	bool hostile;
-	Obstacle(Vector2 pos, bool hostile);
+	Obstacle(const Vector2 pos, const bool hostile);
 	virtual ~Obstacle();
-
 	virtual void update(float deltaTime);
+
 	/// @brief getter for private boolean hostile
 	/// @return hostile boolean
-	bool isHostile();
+	const bool is_hostile() const;
 
 private:
-	/* add your private declarations */
+	bool _hostile;
 };
 
-#endif /* OBSTACLE_H */
+#endif

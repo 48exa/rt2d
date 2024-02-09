@@ -2,19 +2,15 @@
 
 #include "obstacle.h"
 
-Obstacle::Obstacle(Vector2 pos, bool hostile) : Entity()
+Obstacle::Obstacle(const Vector2 pos, const bool hostile) : Entity()
 {
   this->position = pos;
-  this->hostile = hostile;
+  this->_hostile = hostile;
 
-  if (this->hostile)
-  {
+  if (this->_hostile)
     this->addSprite("assets/spike.tga");
-  }
   else
-  {
     this->addSprite("assets/gdsquare.tga");
-  }
 }
 
 Obstacle::~Obstacle()
@@ -26,7 +22,7 @@ void Obstacle::update(float deltaTime)
 {
 }
 
-bool Obstacle::isHostile()
+const bool Obstacle::is_hostile() const
 {
-  return this->hostile;
+  return this->_hostile;
 }

@@ -1,17 +1,18 @@
 /**
- * Copyright 2015 Your Name <you@yourhost.com>
+ * Copyright 2024 D. Westerdijk <you@yourhost.com>
  *
- * @brief Description of My Awesome Game.
+ * @brief RT2D initialisation of Jumper
  *
  * @file main.cpp
  *
- * @mainpage My Awesome Game
+ * @mainpage Jumper is a clone of Geometry Dash made to practice C++, OOP concepts and RT2D
  *
- * @section intro Introduction
+ * @section Introduction
  *
- * Detailed description of My Awesome Game.
- *
- * There's even a second paragraph.
+ * Jumper is a 2D sidescroller-platformer where you jump over spikes and on
+ * squares.
+ * Dodge spikes by jumping over them and be careful not to hit your head against
+ * the squares!
  */
 #include <rt2d/core.h>
 
