@@ -27,10 +27,6 @@ public:
 	virtual ~Jumper01();
 	virtual void update(float deltaTime);
 
-	/// @brief Rectangle to rectangle collision detection
-	/// @param obstacle Obstacle that could collide with the player
-	/// @return true if collision is happening
-	bool AABB(Obstacle *obstacle);
 	/// @brief Specialized version of AABB() that checks if the player is landing ontop of an obstacle
 	/// @param obstacle Obstacle that could collide with the player
 	/// @return true if the type of collision is landing
@@ -50,6 +46,8 @@ public:
 	/// @param hostile Boolean that dictates if the obstacle is a spike or a square
 	void place_obstacle(int chunk, bool hostile);
 	bool in_collision_range(Obstacle *obstacle);
+	bool player_square_collision(Player *p, Obstacle *obs);
+	bool player_spike_collision(Player *p, Obstacle *obs);
 
 private:
 	int distance;
