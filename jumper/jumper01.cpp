@@ -10,7 +10,7 @@
 
 #include "jumper01.h"
 
-#define COLLIDER_DEBUG true
+#define COLLIDER_DEBUG false
 
 Jumper01::Jumper01() : Scene()
 {
@@ -106,10 +106,6 @@ void Jumper01::level_creator(std::vector<int> bytearray)
 
 bool Jumper01::player_square_collision(Player *p, Obstacle *obs)
 {
-#if COLLIDER_DEBUG true
-	ddCircle(CircleX - 32, CircleY - 32, 32, BLUE);
-#endif
-
 	float CircleX = p->position.x + 32;
 	float CircleY = p->position.y + 32;
 	float RectX = obs->position.x + layer->position.x;
@@ -119,12 +115,16 @@ bool Jumper01::player_square_collision(Player *p, Obstacle *obs)
 
 	float DeltaX = CircleX - std::max(RectX, std::min(CircleX, RectX + RectWidth));
 	float DeltaY = CircleY - std::max(RectY, std::min(CircleY, RectY + RectHeight));
+
 	return (DeltaX * DeltaX + DeltaY * DeltaY) < (32 * 32);
 }
 
 bool Jumper01::player_spike_collision(Player *p, Obstacle *obs)
 {
-	return 1;
+	float dx = p->position.x - (obs->position.x + layer->position.x);
+	float dy = p->position.y - (obs->position.y + 8);
+	float radii = 32 + 16;
+	return (dx * dx + dy * dy) < (radii * radii);
 }
 
 bool Jumper01::landingCollision(Obstacle *obstacle)
@@ -132,28 +132,10 @@ bool Jumper01::landingCollision(Obstacle *obstacle)
 #if COLLIDER_DEBUG true
 	ddSquare(obstacle->position.x + layer->position.x - 32, obstacle->position.y - 32, 64, 64, RED);
 #endif
+
 	return (player->position.x < (obstacle->position.x + obstacle->sprite()->size.x / 2) - layer->position.x &&
 					player->position.x + (player->sprite()->size.x / 2) > (obstacle->position.x - obstacle->sprite()->size.x / 2) + layer->position.x &&
 					player->position.y < obstacle->position.y - obstacle->sprite()->size.y / 2);
-}
-
-// https://yal.cc/rectangle-circle-intersection-test/
-bool Jumper01::circleAABB(Obstacle *obstacle)
-{
-	float CircleX = obstacle->position.x + layer->position.x + 32;
-	float CircleY = obstacle->position.y + 40;
-	float RectX = player->position.x;
-	float RectY = player->position.y;
-	float RectWidth = player->sprite()->size.x;
-	float RectHeight = player->sprite()->size.y;
-
-#if COLLIDER_DEBUG true
-	ddCircle(CircleX - 32, CircleY - 32, 16, BLUE);
-#endif
-
-	float DeltaX = CircleX - std::max(RectX, std::min(CircleX, RectX + RectWidth));
-	float DeltaY = CircleY - std::max(RectY, std::min(CircleY, RectY + RectHeight));
-	return (DeltaX * DeltaX + DeltaY * DeltaY) < (16 * 16);
 }
 
 void Jumper01::handleMiscKeyEvents()
@@ -186,7 +168,11 @@ bool Jumper01::in_collision_range(Obstacle *obstacle)
 
 void Jumper01::update(float deltaTime)
 {
+#if COLLIDER_DEBUG true
 	ddClear();
+	ddCircle((player->position.x + 32) - 32, (player->position.y + 32) - 32, 32, BLUE);
+#endif
+
 	// ddCircle(player->position.x, player->position.y, 32, RED);
 	handleMiscKeyEvents();
 
@@ -202,6 +188,14 @@ void Jumper01::update(float deltaTime)
 	for (const auto &obstacle : obstacles)
 	{
 		obstacle->sprite()->color = WHITE;
+
+#if COLLIDER_DEBUG true
+		if (obstacle->isHostile())
+			ddCircle((obstacle->position.x + layer->position.x), obstacle->position.y + 8, 16, RED);
+		else
+			obstacle->sprite()->color = RED;
+#endif
+
 		if (in_collision_range(obstacle))
 		{
 
@@ -211,7 +205,7 @@ void Jumper01::update(float deltaTime)
 
 			if (obstacle->isHostile())
 			{
-				if (circleAABB(obstacle))
+				if (player_spike_collision(player, obstacle))
 					layer->resetPosition();
 				continue;
 			}

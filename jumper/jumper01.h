@@ -31,11 +31,6 @@ public:
 	/// @param obstacle Obstacle that could collide with the player
 	/// @return true if the type of collision is landing
 	bool landingCollision(Obstacle *obstacle);
-	/// @brief Circle to rectangle collision
-	/// https://yal.cc/rectangle-circle-intersection-test/
-	/// @param obstacle Obstacle that could collide with the player
-	/// @return true if collision is happening
-	bool circleAABB(Obstacle *obstacle);
 	/// @brief Handles miscellaneous
 	void handleMiscKeyEvents();
 	/// @brief Creates the level by reading in a bytearray that dictates the position and type of obstacle
