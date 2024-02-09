@@ -18,7 +18,7 @@ Jumper::Jumper() : Scene()
 	t.start();
 	layer = new ObstacleLayer();
 
-	this->distance = 900;
+	this->_distance = 900;
 
 	// initialise the gravity
 	this->gravity = Vector2(0.0, GRAVITY);
@@ -36,7 +36,7 @@ Jumper::Jumper() : Scene()
 	this->addChild(player);
 
 	// The level in 8 bit signed ints
-	std::vector<int> level_layout{
+	std::vector<unsigned short> level_layout{
 			0, 0, 129, 129, 1, 129, 67, 18, 18, 67,
 			129, 129, 129, 1, 32, 84, 32, 0, 131, 128,
 			3, 129, 129, 7, 129, 129, 15, 129, 129, 31,
@@ -44,8 +44,7 @@ Jumper::Jumper() : Scene()
 			7, 3, 1, 0, 0, 129, 129, 1, 1, 135,
 			3, 2, 2, 3, 129, 129, 129, 0, 0, 0,
 			60, 36, 44, 0, 60, 36, 44, 0, 52, 0,
-			0, 0, 0, 0, 0, 0, 0, 0, 0, 255,
-			255, 255, 255, 255, 255, 255, 255, 255, 255, 255};
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 127};
 
 	level_creator(level_layout);
 }
@@ -66,32 +65,32 @@ Jumper::~Jumper()
 	delete layer;
 }
 
-void Jumper::place_obstacle(int chunk, bool hostile)
+void Jumper::place_obstacle(unsigned short chunk, bool hostile)
 {
 	// Make a decrementing for loop that runs 8 times
-	for (uint8_t i = 8; i > 0; --i)
+	for (unsigned char i = 8; i > 0; --i)
 	{
 		// Use bitwise AND to compare the chunk and 128 in hex, if the binary representation of the
 		// chunk contains a 1 on any of the first 7 spots we will place an obstacle
 		// (most significant bit is used to determine obstacle type, 0 for square, 1 for spike)
 		if (0x80 & chunk && i < 8)
-			obstacles.push_back(new Obstacle(Vector2(distance, 752 - (64 * i)), hostile));
+			obstacles.push_back(new Obstacle(Vector2(_distance, 752 - (64 * i)), hostile));
 		// Bitshift to the left by one
 		chunk = chunk << 1;
 	}
 }
 
-void Jumper::level_creator(std::vector<int> bytearray)
+void Jumper::level_creator(std::vector<unsigned short> bytearray)
 {
 	// Loop over every number in the vector of ints
-	for (int chunk : bytearray)
+	for (unsigned short chunk : bytearray)
 	{
 		// If the number is bigger than 128 (0b10000000) it places a spike
 		if (chunk >= 128)
 			place_obstacle(chunk, true);
 		else
 			place_obstacle(chunk, false);
-		distance += 64;
+		_distance += 64;
 
 		// add all obstacles to the vector
 		for (auto const &obstacle : obstacles)
@@ -116,34 +115,34 @@ bool Jumper::player_square_collision(Player *p, Obstacle *obs)
 	float DeltaX = CircleX - std::max(RectX, std::min(CircleX, RectX + RectWidth));
 	float DeltaY = CircleY - std::max(RectY, std::min(CircleY, RectY + RectHeight));
 
-	return (DeltaX * DeltaX + DeltaY * DeltaY) < (32 * 32);
+	return (DeltaX * DeltaX + DeltaY * DeltaY) < (PLAYER_HITBOX_SIZE * PLAYER_HITBOX_SIZE);
 }
 
 bool Jumper::player_spike_collision(Player *p, Obstacle *obs)
 {
 	float dx = p->position.x - (obs->position.x + layer->position.x);
 	float dy = p->position.y - (obs->position.y + 8);
-	short radii = 32 + 16;
+	short radii = PLAYER_HITBOX_SIZE + SPIKE_HITBOX_SIZE;
 
 	return (dx * dx + dy * dy) < (radii * radii);
 }
 
-bool Jumper::landingCollision(Player *p, Obstacle *obs)
+bool Jumper::landing_collision(Player *p, Obstacle *obs)
 {
-	short obj_size = 32;
+	unsigned short obj_size = 32;
 
 	return (p->position.x < (obs->position.x + obj_size) - layer->position.x &&
 					p->position.x + obj_size > (obs->position.x - obj_size) + layer->position.x &&
 					p->position.y < obs->position.y - obj_size);
 }
 
-void Jumper::handleMiscKeyEvents()
+void Jumper::handle_misc_key_events()
 {
 	if (input()->getKeyUp(KeyCode::Escape))
 		this->stop();
 
 	if (input()->getKey(KeyCode::Space))
-		if (player->onFloor() || player->overlapping)
+		if (player->on_floor() || player->overlapping)
 			player->jump();
 
 	if (input()->getKeyDown(KeyCode::A))
@@ -176,10 +175,10 @@ void Jumper::update(float deltaTime)
 #endif
 
 	// ddCircle(player->position.x, player->position.y, 32, RED);
-	handleMiscKeyEvents();
+	handle_misc_key_events();
 
 	// addforce
-	player->addForce(this->gravity);
+	player->add_force(this->gravity);
 
 	// movement 101
 	player->movement(deltaTime);
@@ -218,12 +217,12 @@ void Jumper::update(float deltaTime)
 				continue;
 			}
 
-			if (landingCollision(player, obstacle))
+			if (landing_collision(player, obstacle))
 			{
 				// set the player ontop of the obstacle
 				player->position.y = obstacle->position.y - obstacle->sprite()->size.y;
 				player->overlapping = true;
-				player->resetMovement();
+				player->reset_movement();
 			}
 			else
 				layer->resetPosition();

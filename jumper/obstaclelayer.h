@@ -16,7 +16,7 @@ public:
 	void resetPosition();
 
 private:
-	float originalPosition;
+	float original_position;
 };
 
 #endif /* OBSTACLELAYER_H */

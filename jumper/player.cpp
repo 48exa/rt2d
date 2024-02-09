@@ -16,7 +16,7 @@ Player::~Player()
 void Player::update(float deltaTime)
 {
 	// rotate the player if the player is in the air
-	if (onFloor() || this->overlapping)
+	if (on_floor() || this->overlapping)
 	{
 		this->rotation.z *= 0;
 	}
@@ -29,26 +29,26 @@ void Player::update(float deltaTime)
 		this->rotation.z += TWO_PI * deltaTime;
 	}
 
-	if (this->onFloor())
+	if (this->on_floor())
 	{
-		this->setOnFloor();
-		this->resetMovement();
+		this->set_on_floor();
+		this->reset_movement();
 	}
 }
 
-void Player::addForce(Vector2 force)
+void Player::add_force(Vector2 force)
 {
 	this->acceleration += force;
 }
 
-bool Player::onFloor()
+bool Player::on_floor()
 {
 	return this->position.y < GROUND_PLAYER_OFFSET ? false : true;
 }
 
 void Player::jump()
 {
-	this->velocity -= Vector2(0.0, JUMP_VALUE); 
+	this->velocity -= Vector2(0.0, JUMP_VALUE);
 }
 
 void Player::movement(float deltaTime)
@@ -59,12 +59,12 @@ void Player::movement(float deltaTime)
 	this->acceleration *= 0;
 }
 
-void Player::resetMovement()
+void Player::reset_movement()
 {
 	this->velocity *= 0;
 }
 
-void Player::setOnFloor()
+void Player::set_on_floor()
 {
 	this->position.y = GROUND_PLAYER_OFFSET;
 }
