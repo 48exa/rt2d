@@ -175,8 +175,8 @@ ENDIF()
 IF(MAKE_START)
 	add_executable(jumper
 		jumper/main.cpp
-		jumper/jumper01.cpp
-		jumper/jumper01.h
+		jumper/jumper.cpp
+		jumper/jumper.h
 		jumper/player.cpp
 		jumper/player.h
 		jumper/obstacle.cpp

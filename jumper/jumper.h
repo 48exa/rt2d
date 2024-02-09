@@ -3,7 +3,7 @@
  *
  * @file myscene.h
  *
- * @brief description of Jumper01 behavior.
+ * @brief description of Jumper behavior.
  */
 
 #ifndef MYSCENE_H
@@ -20,17 +20,17 @@
 
 #define SPIKE_HITBOX_Y_OFFSET (12)
 
-class Jumper01 : public Scene
+class Jumper : public Scene
 {
 public:
-	Jumper01();
-	virtual ~Jumper01();
+	Jumper();
+	virtual ~Jumper();
 	virtual void update(float deltaTime);
 
 	/// @brief Specialized version of AABB() that checks if the player is landing ontop of an obstacle
 	/// @param obstacle Obstacle that could collide with the player
 	/// @return true if the type of collision is landing
-	bool landingCollision(Obstacle *obstacle);
+	bool landingCollision(Player *p, Obstacle *obs);
 	/// @brief Handles miscellaneous
 	void handleMiscKeyEvents();
 	/// @brief Creates the level by reading in a bytearray that dictates the position and type of obstacle

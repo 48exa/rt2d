@@ -15,7 +15,7 @@
  */
 #include <rt2d/core.h>
 
-#include "jumper01.h"
+#include "jumper.h"
 
 /// @brief main entry point
 int main(void)
@@ -24,7 +24,7 @@ int main(void)
 	Core core;
 
 	// Scene01
-	Jumper01 *jumper01 = new Jumper01(); // create Scene on the heap
+	Jumper *jumper01 = new Jumper(); // create Scene on the heap
 	while (jumper01->isRunning())
 	{												 // check status of Scene every frame
 		core.run(jumper01);		 // update and render the current scene
