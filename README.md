@@ -1,3 +1,13 @@
+Jumper Game
+====
+
+### Jumper is a game inspired by The Impossible Game. School project
+Enjoy playing!
+
+----
+
+
+
 RT2D
 ====
 
