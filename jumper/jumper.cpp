@@ -184,7 +184,7 @@ void Jumper::update(float deltaTime)
 		obstacle->sprite()->color = WHITE;
 
 #if COLLIDER_DEBUG
-		if (obstacle->isHostile())
+		if (obstacle->is_hostile())
 			ddCircle((obstacle->position.x + layer->position.x), obstacle->position.y + 8, 16, RED);
 		else
 			obstacle->sprite()->color = RED;

@@ -10,7 +10,7 @@ Obstacle::Obstacle(const Vector2 pos, const bool hostile) : Entity()
   if (this->_hostile)
     this->addSprite("assets/spike.tga");
   else
-    this->addSprite("assets/gdsquare.tga");
+    this->addSprite("assets/jmprsquare.tga");
 }
 
 Obstacle::~Obstacle()

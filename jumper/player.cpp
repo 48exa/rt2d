@@ -4,7 +4,7 @@
 
 Player::Player() : Entity()
 {
-	this->addSprite("assets/gdcube.tga");
+	this->addSprite("assets/gdsquare.tga");
 	this->sprite()->color = WHITE;
 }
 
